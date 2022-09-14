@@ -25,7 +25,7 @@ class MainFragment: Fragment() {
         binding = FragmentMainBinding.inflate(inflater,container,false)
         return binding!!.root
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) { //Crea el linear layout para poder ser ejecutado
         super.onViewCreated(view, savedInstanceState)
         val pokemonList = PokemonRepository().getPokemonList()
         recyclerView = binding!!.recyclerView

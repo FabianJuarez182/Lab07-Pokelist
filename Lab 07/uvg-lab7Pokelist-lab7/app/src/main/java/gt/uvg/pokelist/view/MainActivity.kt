@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater) // nos permite pasar argumentos la creacion del binding
         setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+    override fun onSupportNavigateUp(): Boolean { //nos habilita el boton al fragmento principal
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
