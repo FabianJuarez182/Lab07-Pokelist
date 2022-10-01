@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import gt.uvg.pokelist.R
 import gt.uvg.pokelist.databinding.ItemPokemonViewBinding
 import gt.uvg.pokelist.model.Pokemon
+import gt.uvg.pokelist.model.Result
 
-class PokemonListAdapter(private val pokemonList: List<Pokemon>) : RecyclerView.Adapter<PokemonListAdapter.PokemonListHolder>() {
+class PokemonListAdapter(private val pokemonList: List<Result>) : RecyclerView.Adapter<PokemonListAdapter.PokemonListHolder>() {
 
     inner class PokemonListHolder(val binding: ItemPokemonViewBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -18,16 +20,17 @@ class PokemonListAdapter(private val pokemonList: List<Pokemon>) : RecyclerView.
     }
 //Este metodo asignara las propiedades al elemento seleccionado
     override fun onBindViewHolder(holder: PokemonListHolder, position: Int) {
-        val pokemon = pokemonList[position]
-        holder.binding.pokemonName.text =  pokemon.name
-        Picasso.get().load(pokemon.imageUrlFront).into(holder.binding.pokemonPhoto)
-        holder.itemView.setOnClickListener {
-            val creacion = MainFragmentDirections.actionMainFragmentToDetailFragment(pokemonList.get(position).id)
-            holder.binding.root.findNavController().navigate(creacion) // nose llevara al fragmento para ver los detalles
+        val item = pokemonList[position]
+
+        holder.binding.pokemonName.text = item.name
+        val id = position + 1
+        //holder.binding.pokemonName.text =  pokemon.name
+        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png").into(holder.binding.pokemonPhoto)
+        holder.binding.root.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToDetailFragment(id)
+            holder.itemView.findNavController().navigate(action)
         }
     }
 
-    override fun getItemCount(): Int { // Regresa el tamaño de la lista de pokemones
-        return pokemonList.size
-    }
+    override fun getItemCount(): Int = pokemonList.size
 }

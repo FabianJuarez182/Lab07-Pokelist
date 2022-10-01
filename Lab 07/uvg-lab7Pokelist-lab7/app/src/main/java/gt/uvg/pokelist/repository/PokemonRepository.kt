@@ -1,22 +1,30 @@
 package gt.uvg.pokelist.repository
 
-import gt.uvg.pokelist.model.Pokemon
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class PokemonRepository {
-
-    // Obtain pokemon list from https://pokeapi.co/
-    fun getPokemonList(): List<Pokemon> {
-        return listOf(
-            Pokemon(1, "bulbasaur"),
-            Pokemon(2, "ivysaur"),
-            Pokemon(3, "venusaur"),
-            Pokemon(4, "charmander"),
-            Pokemon(5, "charmeleon"),
-            Pokemon(6, "charizard"),
-            Pokemon(7, "squirtle"),
-            Pokemon(8 , "wartortle"),
-            Pokemon(9, "blastoise"),
-            Pokemon(10,"caterpie")
-        )
+    companion object{
+        val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory())
+            .build()
+        private val retrofit by lazy{
+            val logging = HttpLoggingInterceptor()
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client = OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build()
+            Retrofit.Builder()
+                .baseUrl("https://pokeapi.co/api/v2/")
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .client(client)
+                .build()
+        }
+        val api by lazy {
+            retrofit.create(PokemonService::class.java)
+        }
     }
 }
